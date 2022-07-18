@@ -8,11 +8,10 @@ data class ObfustringEncoder(private val key: String) {
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
-                sb.append(currentChar)
                 if (leftSkipSymbols == 0 && encrypt) {
                     sb.append("¦")
                 }
-
+                sb.append(currentChar)
                 return@forEachIndexed
             }
 //TODO no quotes
@@ -50,7 +49,7 @@ data class ObfustringEncoder(private val key: String) {
                         }
                     }
 
-                    leftSkipSymbols = indexEmpty - currentIndex -1
+                    leftSkipSymbols = indexEmpty - currentIndex
                     return@forEachIndexed
                 }
                 '\\' -> {
