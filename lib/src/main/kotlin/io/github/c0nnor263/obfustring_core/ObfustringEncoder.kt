@@ -3,7 +3,7 @@ package io.github.c0nnor263.obfustring_core
 open class ObfustringEncoder(private val key: String) {
     open fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
-        var index = 0
+        var keyIndex = 0
         var leftEscapeSymbols = 0
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftEscapeSymbols != 0) {
@@ -32,6 +32,11 @@ open class ObfustringEncoder(private val key: String) {
                     sb.append(currentChar)
                     return@forEachIndexed
                 }
+                '\\' -> {
+                    leftEscapeSymbols = 1
+                    sb.append(currentChar)
+                    return@forEachIndexed
+                }
                 else -> {
                     sb.append(currentChar)
                     return@forEachIndexed
@@ -45,13 +50,13 @@ open class ObfustringEncoder(private val key: String) {
             }
 
             val value = if (encrypt) {
-                (currentChar.code + key[index].code - encryptInt) % 26
+                (currentChar.code + key[keyIndex].code - encryptInt) % 26
             } else {
-                (currentChar.code - key[index].code + decryptInt) % 26
+                (currentChar.code - key[keyIndex].code + decryptInt) % 26
             }
 
-            index++
-            if (index > key.length - 1) index = 0
+            keyIndex++
+            if (keyIndex > key.length - 1) keyIndex = 0
             sb.append(value.plus(symbolCodeAdd).toChar())
         }
         return sb.toString()
