@@ -5,6 +5,7 @@ data class ObfustringEncoder(private val key: String) {
         val sb = StringBuilder()
         var keyIndex = 0
         var leftSkipSymbols = 0
+        var encryptSymbolsPair = 0
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
@@ -47,10 +48,17 @@ data class ObfustringEncoder(private val key: String) {
                 }
                 '¦' -> {
                     var indexEmpty = -1
-                    string.forEachIndexed loop@{ index, char ->
-                        if (index > currentIndex && char == '¦') {
-                            indexEmpty = index
-                            return@loop
+                    encryptSymbolsPair++
+                    if(encryptSymbolsPair == 2){
+                        encryptSymbolsPair = 0
+                        return@forEachIndexed
+                    }
+                    run loop@{
+                        string.forEachIndexed { index, char ->
+                            if (index > currentIndex && char == '¦') {
+                                indexEmpty = index
+                                return@loop
+                            }
                         }
                     }
 
