@@ -33,6 +33,18 @@ value class ObfustringEncoder(private val key: String) {
                     sb.append(currentChar)
                     return@forEachIndexed
                 }
+                '¦' -> {
+                    var indexEmpty = -1
+                    string.forEachIndexed loop@{ index, char ->
+                        if (index > currentIndex && char == '¦') {
+                            indexEmpty = index
+                            return@loop
+                        }
+                    }
+
+                    leftSkipSymbols = indexEmpty - currentIndex - 1
+                    return@forEachIndexed
+                }
                 '\\' -> {
                     leftSkipSymbols = 1
                     sb.append(currentChar)
