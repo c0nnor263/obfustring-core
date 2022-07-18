@@ -34,7 +34,7 @@ data class ObfustringEncoder(private val key: String) {
                     if (indexEmpty == -1) {
                         indexEmpty = string.length - 1
                     }
-                    leftSkipSymbols = indexEmpty - currentIndex + 2
+                    leftSkipSymbols = indexEmpty - currentIndex + 1
 
                     sb.append('¦')
                     sb.append(currentChar)
