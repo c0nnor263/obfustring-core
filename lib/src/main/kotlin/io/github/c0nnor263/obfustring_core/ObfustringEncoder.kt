@@ -10,6 +10,9 @@ value class ObfustringEncoder(private val key: String) {
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
                 sb.append(currentChar)
+                if (leftSkipSymbols == 0 && encrypt) {
+                    sb.append("¦")
+                }
                 return@forEachIndexed
             }
 
@@ -29,7 +32,12 @@ value class ObfustringEncoder(private val key: String) {
                             }
                         }
                     }
+                    if(indexEmpty == -1){
+                        indexEmpty = string.length -1
+                    }
                     leftSkipSymbols = indexEmpty - currentIndex
+
+                    sb.append('¦')
                     sb.append(currentChar)
                     return@forEachIndexed
                 }
@@ -42,7 +50,7 @@ value class ObfustringEncoder(private val key: String) {
                         }
                     }
 
-                    leftSkipSymbols = indexEmpty - currentIndex - 1
+                    leftSkipSymbols = indexEmpty - currentIndex -1
                     return@forEachIndexed
                 }
                 '\\' -> {
