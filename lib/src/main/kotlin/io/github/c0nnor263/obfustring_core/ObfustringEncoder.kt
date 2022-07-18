@@ -31,10 +31,10 @@ data class ObfustringEncoder(private val key: String) {
                             }
                         }
                     }
-                    if(indexEmpty == -1){
-                        indexEmpty = string.length -1
+                    if (indexEmpty == -1) {
+                        indexEmpty = string.length - 1
                     }
-                    leftSkipSymbols = indexEmpty - currentIndex
+                    leftSkipSymbols = indexEmpty - currentIndex + 2
 
                     sb.append('¦')
                     sb.append(currentChar)
