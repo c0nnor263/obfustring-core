@@ -14,27 +14,32 @@ data class ObfustringEncoder(private val key: String) {
                 sb.append(currentChar)
                 return@forEachIndexed
             }
-//TODO no quotes
+
             val symbolCodeAdd = when (currentChar) {
                 in 'A'..'Z' -> 65
                 in 'a'..'z' -> 97
                 '\$' -> {
                     var indexEmpty: Int = -1
+                    var isCharQuote = false
+                    var isCharBracket = false
                     run index@{
                         string.forEachIndexed loop@{ index, char ->
                             if (index >= currentIndex &&
                                 (char == '"' || char == ' ' ||
                                         (if (string[currentIndex + 1] == '{') char == '}' else false))
                             ) {
+                                if (char == '"' || char == ' ') isCharQuote =
+                                    true else isCharBracket = true
                                 indexEmpty = index
                                 return@index
                             }
                         }
                     }
+
                     if (indexEmpty == -1) {
                         indexEmpty = string.length - 1
                     }
-                    leftSkipSymbols = indexEmpty - currentIndex + 1
+                    leftSkipSymbols = indexEmpty - currentIndex + if (isCharBracket) 1 else 0
 
                     sb.append('¦')
                     sb.append(currentChar)
