@@ -5,17 +5,14 @@ value class ObfustringEncoder(private val key: String) {
     fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
         var keyIndex = 0
-        var leftEscapeSymbols = 0
-        var skipNext = false
+        var leftSkipSymbols = 0
         string.forEachIndexed { currentIndex, currentChar ->
-            if(skipNext) {
-                skipNext = false
-                return@forEachIndexed
-            }
-
-            if (leftEscapeSymbols != 0) {
-                leftEscapeSymbols--
+            if (leftSkipSymbols != 0) {
+                leftSkipSymbols--
                 sb.append(currentChar)
+                if (leftSkipSymbols == 0) {
+                    sb.append("\", true)}")
+                }
                 return@forEachIndexed
             }
 
@@ -35,20 +32,15 @@ value class ObfustringEncoder(private val key: String) {
                             }
                         }
                     }
-                    leftEscapeSymbols = indexEmpty - currentIndex
-                    sb.append(currentChar)
+                    leftSkipSymbols = indexEmpty - currentIndex
                     if (encrypt) {
-                        sb.append(currentChar)
-                        sb.append(currentChar)
-                        leftEscapeSymbols++
-                    }else{
-                        sb.append(currentChar)
-                        skipNext = true
+                        sb.append("${'$'}{ObfustringEncoder(\"$key\").vigenere(\"")
                     }
+                    sb.append(currentChar)
                     return@forEachIndexed
                 }
                 '\\' -> {
-                    leftEscapeSymbols = 1
+                    leftSkipSymbols = 1
                     sb.append(currentChar)
                     return@forEachIndexed
                 }
