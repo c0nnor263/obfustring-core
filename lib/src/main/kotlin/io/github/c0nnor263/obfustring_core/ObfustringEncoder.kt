@@ -2,11 +2,17 @@ package io.github.c0nnor263.obfustring_core
 
 @JvmInline
 value class ObfustringEncoder(private val key: String) {
-   fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
+    fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
         var keyIndex = 0
         var leftEscapeSymbols = 0
+        var skipNext = false
         string.forEachIndexed { currentIndex, currentChar ->
+            if(skipNext) {
+                skipNext = false
+                return@forEachIndexed
+            }
+
             if (leftEscapeSymbols != 0) {
                 leftEscapeSymbols--
                 sb.append(currentChar)
@@ -31,6 +37,14 @@ value class ObfustringEncoder(private val key: String) {
                     }
                     leftEscapeSymbols = indexEmpty - currentIndex
                     sb.append(currentChar)
+                    if (encrypt) {
+                        sb.append(currentChar)
+                        sb.append(currentChar)
+                        leftEscapeSymbols++
+                    }else{
+                        sb.append(currentChar)
+                        skipNext = true
+                    }
                     return@forEachIndexed
                 }
                 '\\' -> {
