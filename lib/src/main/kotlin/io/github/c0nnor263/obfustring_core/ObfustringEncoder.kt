@@ -1,7 +1,8 @@
 package io.github.c0nnor263.obfustring_core
 
-open class ObfustringEncoder(private val key: String) {
-    open fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
+@JvmInline
+value class ObfustringEncoder(private val key: String) {
+   fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
         var keyIndex = 0
         var leftEscapeSymbols = 0
