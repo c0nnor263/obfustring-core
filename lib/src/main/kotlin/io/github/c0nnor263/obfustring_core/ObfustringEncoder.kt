@@ -10,9 +10,6 @@ value class ObfustringEncoder(private val key: String) {
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
                 sb.append(currentChar)
-                if (leftSkipSymbols == 0) {
-                    sb.append("\", true)}")
-                }
                 return@forEachIndexed
             }
 
@@ -33,9 +30,6 @@ value class ObfustringEncoder(private val key: String) {
                         }
                     }
                     leftSkipSymbols = indexEmpty - currentIndex
-                    if (encrypt) {
-                        sb.append("${'$'}{ObfustringEncoder(\"$key\").vigenere(\"")
-                    }
                     sb.append(currentChar)
                     return@forEachIndexed
                 }
