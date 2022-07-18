@@ -8,14 +8,14 @@ data class ObfustringEncoder(private val key: String) {
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
+                sb.append(currentChar)
                 if (leftSkipSymbols == 0 && encrypt) {
                     sb.append("¦")
                 }
-                sb.append(currentChar)
 
                 return@forEachIndexed
             }
-
+//TODO no quotes
             val symbolCodeAdd = when (currentChar) {
                 in 'A'..'Z' -> 65
                 in 'a'..'z' -> 97
@@ -23,7 +23,7 @@ data class ObfustringEncoder(private val key: String) {
                     var indexEmpty: Int = -1
                     run index@{
                         string.forEachIndexed loop@{ index, char ->
-                            if (index > currentIndex &&
+                            if (index >= currentIndex &&
                                 (char == '"' || char == ' ' ||
                                         (if (string[currentIndex + 1] == '{') char == '}' else false))
                             ) {
