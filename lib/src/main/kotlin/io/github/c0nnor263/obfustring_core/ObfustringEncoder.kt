@@ -54,7 +54,7 @@ data class ObfustringEncoder(private val key: String) {
                         }
                     }
 
-                    leftSkipSymbols = indexEmpty - currentIndex
+                    leftSkipSymbols = indexEmpty - currentIndex - 1
                     return@forEachIndexed
                 }
                 '\\' -> {
