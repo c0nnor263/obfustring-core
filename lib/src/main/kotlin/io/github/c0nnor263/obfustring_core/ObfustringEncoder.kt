@@ -1,7 +1,6 @@
 package io.github.c0nnor263.obfustring_core
 
-@JvmInline
-value class ObfustringEncoder(private val key: String) {
+data class ObfustringEncoder(private val key: String) {
     fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
         var keyIndex = 0
@@ -9,10 +8,11 @@ value class ObfustringEncoder(private val key: String) {
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
-                sb.append(currentChar)
                 if (leftSkipSymbols == 0 && encrypt) {
                     sb.append("¦")
                 }
+                sb.append(currentChar)
+
                 return@forEachIndexed
             }
 
