@@ -1,6 +1,7 @@
 package io.github.c0nnor263.obfustring_core
 
-data class ObfustringEncoder(private val key: String) {
+@JvmInline
+value class ObfustringEncoder(private val key: String) {
     fun vigenere(string: String, encrypt: Boolean = false): String = with(string) {
         val sb = StringBuilder()
         var keyIndex = 0
@@ -25,7 +26,7 @@ data class ObfustringEncoder(private val key: String) {
                     run index@{
                         string.forEachIndexed loop@{ index, char ->
                             if (index >= currentIndex &&
-                                (char == '"' || char == ' ' ||
+                                (char == '"' || char == ' ' || string[currentIndex + 1] == '\$' ||
                                         (if (string[currentIndex + 1] == '{') char == '}' else false))
                             ) {
                                 if (char == '"' || char == ' ') isCharBracket = true
@@ -36,9 +37,9 @@ data class ObfustringEncoder(private val key: String) {
                     }
 
                     if (indexEmpty == -1) {
-                        indexEmpty = string.length - 1
+                        indexEmpty = string.length -1
                     }
-                    leftSkipSymbols = indexEmpty - currentIndex + if (isCharBracket) 1 else 0
+                    leftSkipSymbols = indexEmpty - currentIndex + if (isCharBracket) -1 else 0
 
                     sb.append('¦')
                     sb.append(currentChar)
@@ -47,7 +48,7 @@ data class ObfustringEncoder(private val key: String) {
                 '¦' -> {
                     var indexEmpty = -1
                     encryptSymbolsPair++
-                    if(encryptSymbolsPair == 2){
+                    if (encryptSymbolsPair == 2) {
                         encryptSymbolsPair = 0
                         return@forEachIndexed
                     }
