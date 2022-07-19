@@ -9,10 +9,10 @@ data class ObfustringEncoder(private val key: String) {
         string.forEachIndexed { currentIndex, currentChar ->
             if (leftSkipSymbols != 0) {
                 leftSkipSymbols--
+                sb.append(currentChar)
                 if (leftSkipSymbols == 0 && encrypt) {
                     sb.append("¦")
                 }
-                sb.append(currentChar)
                 return@forEachIndexed
             }
 
@@ -21,7 +21,6 @@ data class ObfustringEncoder(private val key: String) {
                 in 'a'..'z' -> 97
                 '\$' -> {
                     var indexEmpty: Int = -1
-                    var isCharQuote = false
                     var isCharBracket = false
                     run index@{
                         string.forEachIndexed loop@{ index, char ->
@@ -29,8 +28,7 @@ data class ObfustringEncoder(private val key: String) {
                                 (char == '"' || char == ' ' ||
                                         (if (string[currentIndex + 1] == '{') char == '}' else false))
                             ) {
-                                if (char == '"' || char == ' ') isCharQuote =
-                                    true else isCharBracket = true
+                                if (char == '"' || char == ' ') isCharBracket = true
                                 indexEmpty = index
                                 return@index
                             }
